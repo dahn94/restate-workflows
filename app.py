@@ -46,5 +46,12 @@ async def verify(ctx: WorkflowSharedContext, secret: str) -> str:
 
 
 # ASGI app that Restate connects to. request_response = safe behind Render's
-# proxy (which terminates TLS and talks HTTP/1.1 to your service).
+# proxy (and required for AWS Lambda, which can't do bidi streaming).
 app = restate.app(services=[signup], protocol="request_response")
+
+# --- AWS Lambda entry point --------------------------------------------------
+# Same `app`, wrapped as a Lambda handler. Set the Lambda handler to
+# "app.handler". Harmless when running under hypercorn (Render).
+from restate.aws_lambda import wrap_asgi_as_lambda_handler  # noqa: E402
+
+handler = wrap_asgi_as_lambda_handler(app)
