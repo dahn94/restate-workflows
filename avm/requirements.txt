@@ -1,3 +1,4 @@
 restate-sdk==1.0.1
 hypercorn==0.17.3
 boto3
+-e ../avm-caixa-cr12-2026

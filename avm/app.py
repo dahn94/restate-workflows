@@ -87,7 +87,9 @@ async def run(ctx: WorkflowContext, req: dict) -> dict:
 
 # --- Endpoint ----------------------------------------------------------------
 # request_response: seguro atrás de proxy (Render) e obrigatório no Lambda.
-app = restate.app(services=[avm], protocol="request_response")
+from base_workflow import base_ingest  # noqa: E402
+
+app = restate.app(services=[avm, base_ingest], protocol="request_response")
 
 # Entry point do AWS Lambda (mesmo app). Handler do Lambda = "app.handler".
 from restate.aws_lambda import wrap_asgi_as_lambda_handler  # noqa: E402
